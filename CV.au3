@@ -51,10 +51,11 @@
 #Include <StaticConstants.au3>
 #Include <TabConstants.au3>
 
-#Include "UDFs\APIConstants.au3"
-;~#Include "UDFs\APIErrors.au3"
+#Include <APIConstants.au3>
+;~ #Include "UDFs\APIErrors.au3"
 #Include "UDFs\ColorChooser.au3"
-#Include "UDFs\WinAPIEx.au3"
+#Include "GDIPlus.au3"
+#Include <WinAPIEx.au3>
 
 ;~Opt('GUICloseOnESC', 0)
 Opt('GUIResizeMode', BitOR($GUI_DOCKLEFT, $GUI_DOCKTOP, $GUI_DOCKWIDTH, $GUI_DOCKHEIGHT))
@@ -1018,7 +1019,7 @@ Func _Capture_X1($iX, $iY, $iWidth, $iHeight, $iColCrop, $iColFill = 0, $fCaptur
 		$hScreen = _GDIPlus_BitmapCreateFromHBITMAP($hBitmap)
 		_WinAPI_DeleteObject($hBitmap)
 	EndIf
-	$hBitmap = _GDIPlus_CreateBitmapFromScan0($W, $H)
+	$hBitmap = _GDIPlus_BitmapCreateFromScan0($W, $H)
 	$hGraphics = _GDIPlus_ImageGetGraphicsContext($hBitmap)
 ;~	_GDIPlus_GraphicsClear($hGraphics, 0)
 	$hPen = _GDIPlus_PenCreate($iColCrop)
@@ -2154,7 +2155,7 @@ Func _SetControlInfo($hWnd)
 			_SetData($Input[$i], '')
 		Next
 	EndIf
-	$Data = _WinAPI_GetWindowLongEx($hWnd, $GWL_STYLE)
+	$Data = _WinAPI_GetWindowLong($hWnd, $GWL_STYLE)
 ;~	If $Data Then
 		_SetData($Input[21], '0x' & Hex($Data, 8))
 		_SetData($Input[22], _GetStyleString($Data, 0, 0))
@@ -2163,7 +2164,7 @@ Func _SetControlInfo($hWnd)
 ;~			_SetData($Input[$i], '')
 ;~		Next
 ;~	EndIf
-	$Data = _WinAPI_GetWindowLongEx($hWnd, $GWL_EXSTYLE)
+	$Data = _WinAPI_GetWindowLong($hWnd, $GWL_EXSTYLE)
 ;~	If $Data Then
 		_SetData($Input[23], '0x' & Hex($Data, 8))
 		_SetData($Input[24], _GetStyleString($Data, 0, 1))
@@ -2231,7 +2232,7 @@ Func _SetWindowInfo($hWnd)
 	Else
 		_SetData($Input[4], '')
 	EndIf
-	$Data = _WinAPI_GetWindowLongEx($hWnd, $GWL_STYLE)
+	$Data = _WinAPI_GetWindowLong($hWnd, $GWL_STYLE)
 ;~	If $Data Then
 		_SetData($Input[5], '0x' & Hex($Data, 8))
 		_SetData($Input[6], _GetStyleString($Data))
@@ -2240,7 +2241,7 @@ Func _SetWindowInfo($hWnd)
 ;~			_SetData($Input[$i], '')
 ;~		Next
 ;~	EndIf
-	$Data = _WinAPI_GetWindowLongEx($hWnd, $GWL_EXSTYLE)
+	$Data = _WinAPI_GetWindowLong($hWnd, $GWL_EXSTYLE)
 ;~	If $Data Then
 		_SetData($Input[7], '0x' & Hex($Data, 8))
 		_SetData($Input[8], _GetStyleString($Data, 1, 1))
@@ -2638,19 +2639,19 @@ EndFunc   ;==>_HK_SelectAll
 
 #Region GDI+ Functions
 
-Func _GDIPlus_BitmapGetPixel($hBitmap, $iX, $iY)
-
-	Local $Ret = DllCall($ghGDIPDll, 'uint', 'GdipBitmapGetPixel', 'ptr', $hBitmap, 'int', $iX, 'int', $iY, 'uint*', 0)
-
-	If (@error) Or ($Ret[0]) Then
-		Return SetError(@error, @extended, 0)
-	EndIf
-	Return $Ret[4]
-EndFunc   ;==>_GDIPlus_BitmapGetPixel
+;Func _GDIPlus_BitmapGetPixel($hBitmap, $iX, $iY)
+;
+;	Local $Ret = DllCall($ghGDIPDll, 'uint', 'GdipBitmapGetPixel', 'ptr', $hBitmap, 'int', $iX, 'int', $iY, 'uint*', 0)
+;
+;	If (@error) Or ($Ret[0]) Then
+;		Return SetError(@error, @extended, 0)
+;	EndIf
+;	Return $Ret[4]
+;EndFunc   ;==>_GDIPlus_BitmapGetPixel
 
 Func _GDIPlus_CreateBitmapFromScan0($iWidth, $iHeight, $iStride = 0, $iPixelFormat = 0x0026200A, $pScan0 = 0)
 
-	Local $Ret = DllCall($ghGDIPDll, 'uint', 'GdipCreateBitmapFromScan0', 'int', $iWidth, 'int', $iHeight, 'int', $iStride, 'int', $iPixelFormat, 'ptr', $pScan0, 'ptr*', 0)
+	Local $Ret = DllCall($__g_hGDIPDll, 'uint', 'GdipCreateBitmapFromScan0', 'int', $iWidth, 'int', $iHeight, 'int', $iStride, 'int', $iPixelFormat, 'ptr', $pScan0, 'ptr*', 0)
 
 	If (@error) Or ($Ret[0]) Then
 		Return SetError(@error, @extended, 0)
