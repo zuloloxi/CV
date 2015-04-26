@@ -1,4 +1,5 @@
 Author:   Yashied
+http://www.autoitscript.com/forum/topic/126716-control-viewer-autoit-window-info-tool/
 
 Script Function:
 	    (Control Viewer v1.1) AutoIt Window Information Tool
